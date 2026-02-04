@@ -74,6 +74,7 @@
 ;;   which see.
 ;; - For AI/ML API, Together.ai, Anyscale, Groq, OpenRouter, DeepSeek, Cerebras or
 ;;   Github Models: define a gptel-backend with `gptel-make-openai', which see.
+;; - For NanoGPT: define a backend with `gptel-make-nanogpt', which see.
 ;; - For PrivateGPT: define a backend with `gptel-make-privategpt', which see.
 ;; - For Perplexity: define a backend with `gptel-make-perplexity', which see.
 ;; - For Deepseek: define a backend with `gptel-make-deepseek', which see.

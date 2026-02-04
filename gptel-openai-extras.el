@@ -273,6 +273,52 @@ parameters."
                        nil nil #'equal)
             backend))))
 
+;;; NanoGPT
+;;;###autoload
+(cl-defun gptel-make-nanogpt
+    (name &key curl-args stream key request-params url
+          (header (lambda () (when-let* ((key (gptel--get-api-key)))
+                          `(("Authorization" . ,(concat "Bearer " key))))))
+          (host "nano-gpt.com")
+          (protocol "https")
+          (endpoint "/api/v1/chat/completions")
+          (models '("zai-org/glm-4.7")))
+  "Register a NanoGPT backend for gptel with NAME.
+
+NanoGPT offers an OpenAI-compatible API.  If URL is provided, it should be a
+full API URL like \"https://nano-gpt.com/api/v1/chat/completions\" and it
+overrides HOST, PROTOCOL and ENDPOINT.
+
+For the meanings of the remaining keyword arguments, see `gptel-make-openai'."
+  (declare (indent 1))
+  (when url
+    (require 'url-parse)
+    (let* ((parsed (url-generic-parse-url url))
+           (url-protocol (url-type parsed))
+           (url-host (url-host parsed))
+           (url-port (url-port parsed))
+           (url-endpoint (url-filename parsed)))
+      (when url-protocol (setq protocol url-protocol))
+      (when url-host
+        (setq host (if url-port (format "%s:%s" url-host url-port) url-host)))
+      (when url-endpoint (setq endpoint url-endpoint))))
+  (let ((backend (gptel--make-openai
+                  :curl-args curl-args
+                  :name name
+                  :host host
+                  :header header
+                  :key key
+                  :models (gptel--process-models models)
+                  :protocol protocol
+                  :endpoint endpoint
+                  :stream stream
+                  :request-params request-params
+                  :url (if protocol
+                           (concat protocol "://" host endpoint)
+                         (concat host endpoint)))))
+    (setf (alist-get name gptel--known-backends nil nil #'equal) backend)
+    backend))
+
 ;;; Deepseek
 (cl-defstruct (gptel-deepseek (:include gptel-openai)
                               (:copier nil)

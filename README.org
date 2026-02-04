@@ -83,6 +83,7 @@ gptel uses Curl if available, but falls back to the built-in url-retrieve to wor
       - [[#groq][Groq]]
       - [[#mistral-le-chat][Mistral Le Chat]]
       - [[#openrouter][OpenRouter]]
+      - [[#nanogpt][NanoGPT]]
       - [[#privategpt][PrivateGPT]]
       - [[#deepseek][DeepSeek]]
       - [[#sambanova-deepseek][Sambanova (Deepseek)]]
@@ -207,6 +208,7 @@ gptel supports a number of LLM providers:
 | Mistral Le Chat      | [[https://console.mistral.ai/api-keys][API key]]                    |
 | Perplexity           | [[https://docs.perplexity.ai/docs/getting-started][API key]]                    |
 | OpenRouter           | [[https://openrouter.ai/keys][API key]]                    |
+| NanoGPT              | [[https://nano-gpt.com/][API key]]                    |
 | AI/ML API            | [[https://aimlapi.com/app/?utm_source=gptel&utm_medium=github&utm_campaign=integration][API key]]                    |
 | together.ai          | [[https://api.together.xyz/settings/api-keys][API key]]                    |
 | Anyscale             | [[https://docs.endpoints.anyscale.com/][API key]]                    |
@@ -827,6 +829,58 @@ The above code makes the backend available to select.  If you want it to be the 
                   google/palm-2-codechat-bison-32k
                   google/gemini-pro)))
 
+#+end_src
+
+#+html: </details>
+#+html: <details><summary>
+**** NanoGPT
+#+html: </summary>
+
+Register a backend with
+
+#+begin_src emacs-lisp
+;; NanoGPT offers an OpenAI compatible API
+(gptel-make-nanogpt "NanoGPT"               ;Any name you want
+  :key "your-api-key"                       ;can be a function that returns the key
+  :models '("zai-org/glm-4.7"))
+#+end_src
+
+If you want to drive configuration via environment variables (for example,
+=NANOGPT_API_URL=, =NANOGPT_MODEL=, =NANOGPT_CONFIRM=, =NANOGPT_TIMEOUT=):
+
+#+begin_src emacs-lisp
+(let* ((api-url (getenv "NANOGPT_API_URL"))
+       (model (or (getenv "NANOGPT_MODEL") "zai-org/glm-4.7"))
+       (confirm (string= (or (getenv "NANOGPT_CONFIRM") "") "true"))
+       (timeout (getenv "NANOGPT_TIMEOUT")))
+  (gptel-make-nanogpt "NanoGPT"
+    :key (lambda () (getenv "NANOGPT_API_KEY"))
+    :models (list model)
+    :request-params (and confirm '(:confirm t))
+    :curl-args (and timeout (list "--max-time" timeout))
+    :url api-url))
+#+end_src
+
+You can pick this backend from the menu when using gptel (see [[#usage][Usage]]).
+
+***** (Optional) Set as the default gptel backend
+
+The above code makes the backend available to select.  If you want it to be the default backend for gptel, you can set this as the value of =gptel-backend=.  Use this instead of the above.
+
+#+begin_src emacs-lisp
+;; OPTIONAL configuration
+(let* ((api-url (getenv "NANOGPT_API_URL"))
+       (model (or (getenv "NANOGPT_MODEL") "zai-org/glm-4.7"))
+       (confirm (string= (or (getenv "NANOGPT_CONFIRM") "") "true"))
+       (timeout (getenv "NANOGPT_TIMEOUT")))
+  (setq gptel-model (intern model)
+        gptel-backend
+        (gptel-make-nanogpt "NanoGPT"
+          :key (lambda () (getenv "NANOGPT_API_KEY"))
+          :models (list model)
+          :request-params (and confirm '(:confirm t))
+          :curl-args (and timeout (list "--max-time" timeout))
+          :url api-url)))
 #+end_src
 
 #+html: </details>
