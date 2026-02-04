@@ -842,7 +842,7 @@ Register a backend with
 ;; NanoGPT offers an OpenAI compatible API
 (gptel-make-nanogpt "NanoGPT"               ;Any name you want
   :key "your-api-key"                       ;can be a function that returns the key
-  :models '("zai-org/glm-4.7"))
+  :models '("moonshotai/kimi-k2.5"))
 #+end_src
 
 If you want to drive configuration via environment variables (for example,
@@ -850,7 +850,7 @@ If you want to drive configuration via environment variables (for example,
 
 #+begin_src emacs-lisp
 (let* ((api-url (getenv "NANOGPT_API_URL"))
-       (model (or (getenv "NANOGPT_MODEL") "zai-org/glm-4.7"))
+       (model (or (getenv "NANOGPT_MODEL") "moonshotai/kimi-k2.5"))
        (confirm (string= (or (getenv "NANOGPT_CONFIRM") "") "true"))
        (timeout (getenv "NANOGPT_TIMEOUT")))
   (gptel-make-nanogpt "NanoGPT"
@@ -870,7 +870,7 @@ The above code makes the backend available to select.  If you want it to be the 
 #+begin_src emacs-lisp
 ;; OPTIONAL configuration
 (let* ((api-url (getenv "NANOGPT_API_URL"))
-       (model (or (getenv "NANOGPT_MODEL") "zai-org/glm-4.7"))
+       (model (or (getenv "NANOGPT_MODEL") "moonshotai/kimi-k2.5"))
        (confirm (string= (or (getenv "NANOGPT_CONFIRM") "") "true"))
        (timeout (getenv "NANOGPT_TIMEOUT")))
   (setq gptel-model (intern model)

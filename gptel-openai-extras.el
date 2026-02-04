@@ -282,7 +282,31 @@ parameters."
           (host "nano-gpt.com")
           (protocol "https")
           (endpoint "/api/v1/chat/completions")
-          (models '("zai-org/glm-4.7")))
+          (models '("moonshotai/kimi-k2.5"
+                    "auto-model"
+                    "auto-model-basic"
+                    "auto-model-standard"
+                    "auto-model-premium"
+                    "zai-org/glm-4.7"
+                    "openai/gpt-4o-mini"
+                    "openai/gpt-4o"
+                    "openai/gpt-5"
+                    "openai/o3"
+                    "openai/o4-mini"
+                    "claude-3-7-sonnet-20250219"
+                    "claude-opus-4-1-20250805"
+                    "claude-sonnet-4-5-20250929"
+                    "google/gemini-3-flash-preview"
+                    "google/gemini-flash-1.5"
+                    "deepseek-r1"
+                    "deepseek-chat"
+                    "mistralai/mistral-large"
+                    "mistralai/mistral-small-creative"
+                    "meta-llama/llama-3.3-70b-instruct"
+                    "meta-llama/llama-4-maverick"
+                    "qwen-max"
+                    "qwen-plus"
+                    "qwen-turbo")))
   "Register a NanoGPT backend for gptel with NAME.
 
 NanoGPT offers an OpenAI-compatible API.  If URL is provided, it should be a
